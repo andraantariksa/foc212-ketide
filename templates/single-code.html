@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  </head>
+  <body>
+    {{template "navbar"}}
+    <section class="section">
+        <div class="code container">
+          <div id="editor"></div>
+          <script src="https://pagecdn.io/lib/ace/1.4.6/ace.js" integrity="sha256-CVkji/u32aj2TeC+D13f7scFSIfphw2pmu4LaKWMSY8=" crossorigin="anonymous"></script>
+          <script src="https://pagecdn.io/lib/ace/1.4.6/theme-dracula.js" integrity="sha256-CHRMSxTlo+Z7Cwa3NbDjlNpAV5cWPJh9sfrj9bPlx2s=" crossorigin="anonymous"></script>
+          <script>
+            let editor = ace.edit("editor");
+            editor.setTheme("ace/theme/twilight");
+          </script>
+          <style>
+          #editor {
+            width: 100%;
+            height: 500px;
+          }
+          </style>
+        </div>
+        <div class="code-input container">
+          <h2 class="is-size-2">stdin</h2>
+          <pre style="border: 1px solid #ccc;">3</pre>
+        </div>
+        <div class="code-output container">
+          <h2 class="is-size-2">stdout</h2>
+          <pre style="border: 1px solid #ccc;">5</pre>
+        </div>
+    </section>
+    <!-- Begin additional javascript -->
+    <script src="static/js/main.js"></script>
+  </body>
+</html>

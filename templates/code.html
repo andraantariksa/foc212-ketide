@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  </head>
+  <body>
+    {{template "navbar"}}
+    <section class="section">
+      <div class="container">
+        <table class="table is-bordered is-fullwidth">
+          <thead>
+            <tr>
+              <th rowspan="2">#</th>
+              <th rowspan="2"><abbr title="Name">Name</abbr></th>
+              <th rowspan="2"><abbr title="Category">Category</abbr></th>
+              <th colspan="3"><abbr title="Submissions">Submissions</abbr></th>
+              <th colspan="3"><abbr title="Users">Users</abbr></th>
+            </tr>
+            <tr>
+                <th><abbr title="Total">Total</abbr></th>
+                <th><abbr title="Accepted">Accepted</abbr></th>
+                <th><abbr title="Ratio">Ratio</abbr></th>
+                <th><abbr title="Total">Total</abbr></th>
+                <th><abbr title="Accepted">Accepted</abbr></th>
+                <th><abbr title="Ratio">Ratio</abbr></th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>1</th>
+              <td><a href="/problems/1">Hello World!</a></td>
+              <td>basic</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <!-- Begin additional javascript -->
+    <script src="static/js/main.js"></script>
+  </body>
+</html>
