@@ -9,12 +9,16 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
+
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 
 	"github.com/go-xorm/xorm"
 	_ "github.com/lib/pq"
+
+	"gitlab.com/cikadev/ketide/models"
 )
 
 type TemplateRenderer struct {
@@ -59,31 +63,12 @@ func findAndParseTemplates(rootDir string, funcMap template.FuncMap) (*template.
 	return root, err
 }
 
-type Users struct {
-	ID        int64     `xorm:"pk not null autoincr"`
-	Username  string    `xorm:"unique not null"`
-	Email     string    `xorm:"not null"`
-	Password  string    `xorm:"not null"`
-	CreatedAt time.Time `xorm:"created not null"`
-	UpdatedAt time.Time `xorm:"updated not null"`
-}
-
-type Code struct {
-	ID        int64  `xorm:"pk not null autoincr"`
-	Language  string `xorm:"not null"`
-	Code      string `xorm:"not null"`
-	Stdin     string
-	Stdout    string
-	CreatedAt time.Time `xorm:"created"`
-	UpdatedAt time.Time `xorm:"updated"`
-}
-
 func migrateTable(db *xorm.Engine) {
-	if err := db.Sync(new(Users)); err != nil {
+	if err := db.Sync(new(models.Users)); err != nil {
 		panic("Table users migrate error")
 	}
 
-	if err := db.Sync(new(Code)); err != nil {
+	if err := db.Sync(new(models.Codes)); err != nil {
 		panic("Table code migrate error")
 	}
 }
@@ -119,22 +104,21 @@ func main() {
 
 	e := echo.New()
 
+	// sess := sessions.New()
+
+	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+	// 	Format: `[${time_rfc3339}]  ${status}  ${method} ${host}${path} ${latency_human}` + "\n",
+	// }))
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
+
 	e.Static("/static", "static")
 
-	// renderer := &TemplateRenderer{
-	// 	 templates: template.Must(template.ParseGlob("templates/*.html")),
-	// }
 	renderer := &TemplateRenderer{
 		templates: template.Must(findAndParseTemplates("templates", template.FuncMap{})),
 	}
-	// renderer, err := findAndParseTemplates("templates", a)
 	e.Renderer = renderer
 
-	// Main
-
-	e.GET("/", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "home.html", map[string]interface{}{})
-	})
+	route(e)
 
 	e.GET("/help", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "help.html", map[string]interface{}{})
@@ -147,7 +131,7 @@ func main() {
 	})
 
 	e.POST("/signup", func(c echo.Context) error {
-		users := new(Users)
+		users := new(models.Users)
 		if err := c.Bind(users); err != nil {
 			return c.NoContent(http.StatusBadRequest)
 		}
@@ -160,15 +144,16 @@ func main() {
 	})
 
 	e.GET("/signin", func(c echo.Context) error {
+		users := new(models.Users)
+		if err := c.Bind(users); err != nil {
+			return c.NoContent(http.StatusBadRequest)
+		}
+
 		return c.Render(http.StatusOK, "user/signin.html", map[string]interface{}{})
 	})
 
 	e.GET("/settings", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "user/settings.html", map[string]interface{}{})
-	})
-
-	e.GET("/recent", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "code.html", map[string]interface{}{})
 	})
 
 	// Code
