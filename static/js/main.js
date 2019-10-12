@@ -18,3 +18,12 @@ document.querySelectorAll(".navbar-burger").forEach((element) => {
         });
     });
 });
+
+const dropdownUsername = document.querySelector("#dropdown-username");
+const dropdownUsernameButton = document.querySelector("#dropdown-username-button");
+
+if (dropdownUsername && dropdownUsernameButton) {
+    dropdownUsernameButton.addEventListener("click", () => {
+        dropdownUsername.classList.toggle("is-active");
+    });
+}

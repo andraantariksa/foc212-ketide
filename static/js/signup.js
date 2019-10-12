@@ -1,30 +1,42 @@
 const usernameRegex = /^[a-z0-9]{5,16}$/;
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
 
-let fieldState = {};
-
-// TODO
-// iconUsername is not working when I tried to change the icon inside the event listener
+let fieldState = {
+    email: false,
+    username: false,
+    password: false,
+    passwordConfirmation: false,
+};
 
 let buttonSubmit = document.querySelector("button[type='submit']");
 
-// let iconUsername = document.querySelector(".fas#username");
 let fieldUsername = document.querySelector(".input#username");
 let captionUsername = document.querySelector(".help#username");
 
 let fieldEmail = document.querySelector(".input#email");
 let captionEmail = document.querySelector(".help#email");
 
-// buttonSubmit.disabled = true;
+let fieldPassword = document.querySelector(".input#password");
+let captionPassword = document.querySelector(".help#password");
+
+let fieldPasswordConfirmation = document.querySelector(".input#password-confirmation");
+let captionPasswordConfirmation = document.querySelector(".help#password-confirmation");
+
+let notification = document.querySelector("#notification");
+let form = document.querySelector("#form");
+
+buttonSubmit.disabled = true;
 
 function buttonState() {
-    for (let key in Object.keys(fieldState)) {
-        if (!fieldState[key]) {
-            // buttonSubmit.disabled = true;
+    let objArray = Object.values(fieldState);
+    for (let i in objArray) {
+        if (!objArray[i]) {
+            buttonSubmit.disabled = true;
             return;
         }
     }
-    // buttonSubmit.disabled = false;
+    buttonSubmit.disabled = false;
 }
 
 fieldUsername.addEventListener("change", () => {
@@ -40,11 +52,8 @@ fieldUsername.addEventListener("change", () => {
 
     captionUsername.innerText = message;
 
-    fieldState["username"] = isValidUsername;
+    fieldState.username = isValidUsername;
     buttonState();
-    
-    // iconUsername.classList.remove("fa-exclamation-triangle");
-    // iconUsername.classList.add("fa-check");
 });
 
 fieldEmail.addEventListener("change", () => {
@@ -60,13 +69,70 @@ fieldEmail.addEventListener("change", () => {
 
     captionEmail.innerText = message;
 
-    fieldState["email"] = isValidEmail;
+    fieldState.email = isValidEmail;
     buttonState();
 });
 
-// TODO
-// Implement AJAX signup
+fieldPassword.addEventListener("change", () => {
+    let isValidPassword = (passwordRegex).test(fieldPassword.value);
+    let fieldColorForValid = (valid) => (valid === isValidPassword)?"is-success":"is-danger";
+    let message = (isValidPassword)?"":"Invalid password. Password must have an uppercase, lowercase ,and numeric letter with 8-16 length.";
+
+    fieldPassword.classList.remove(fieldColorForValid(false));
+    fieldPassword.classList.add(fieldColorForValid(true));
+
+    captionPassword.classList.remove(fieldColorForValid(false));
+    captionPassword.classList.add(fieldColorForValid(true));
+
+    captionPassword.innerText = message;
+
+    fieldState.password = isValidPassword;
+    buttonState();
+});
+
+fieldPasswordConfirmation.addEventListener("change", () => {
+    let isValidPasswordConfirmation = fieldPassword.value == fieldPasswordConfirmation.value;
+    let fieldColorForValid = (valid) => (valid === isValidPasswordConfirmation)?"is-success":"is-danger";
+    let message = (isValidPasswordConfirmation)?"":"Password does not match.";
+
+    fieldPasswordConfirmation.classList.remove(fieldColorForValid(false));
+    fieldPasswordConfirmation.classList.add(fieldColorForValid(true));
+
+    captionPasswordConfirmation.classList.remove(fieldColorForValid(false));
+    captionPasswordConfirmation.classList.add(fieldColorForValid(true));
+
+    captionPasswordConfirmation.innerText = message;
+
+    fieldState.passwordConfirmation = isValidPasswordConfirmation;
+    buttonState();
+});
 
 buttonSubmit.addEventListener("click", () => {
-
+    notification.classList.add("is-hidden");
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: fieldEmail.value,
+            username: fieldUsername.value,
+            password: fieldPassword.value,
+            passwordConfirmation: fieldPasswordConfirmation.value,
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        notification.classList.remove("is-hidden");
+        if (!data.success) {
+            notification.innerText = data.message;
+        } else {
+            form.classList.add("is-hidden");
+            notification.classList.remove("is-danger");
+            notification.classList.add("is-success");
+            notification.innerText = "Congratulations! You account has been created!";
+            return;
+        }
+    });
 });

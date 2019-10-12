@@ -8,39 +8,25 @@
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
   </head>
   <body>
-    {{template "navbar"}}
+    {{ template "navbar" . }}
     <section class="section">
       <div class="container">
         <table class="table is-bordered is-fullwidth">
           <thead>
             <tr>
-              <th rowspan="2">#</th>
-              <th rowspan="2"><abbr title="Name">Name</abbr></th>
-              <th rowspan="2"><abbr title="Category">Category</abbr></th>
-              <th colspan="3"><abbr title="Submissions">Submissions</abbr></th>
-              <th colspan="3"><abbr title="Users">Users</abbr></th>
+              <th><abbr>#</abbr></th>
+              <th><abbr title="Language">Language</abbr></th>
+              <th><abbr title="Updated on">Updated on</abbr></th>
             </tr>
-            <tr>
-                <th><abbr title="Total">Total</abbr></th>
-                <th><abbr title="Accepted">Accepted</abbr></th>
-                <th><abbr title="Ratio">Ratio</abbr></th>
-                <th><abbr title="Total">Total</abbr></th>
-                <th><abbr title="Accepted">Accepted</abbr></th>
-                <th><abbr title="Ratio">Ratio</abbr></th>
-              </tr>
           </thead>
           <tbody>
+            {{ range $code := .codes }}
             <tr>
-              <th>1</th>
-              <td><a href="/problems/1">Hello World!</a></td>
-              <td>basic</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
-              <td>0</td>
+              <th><a href="/{{ $code.ID }}">{{ $code.ID }}</a></th>
+              <td>{{ $code.Language }}</td>
+              <td>{{ $code.CreatedAt }}</td>
             </tr>
+            {{ end }}
           </tbody>
         </table>
       </div>

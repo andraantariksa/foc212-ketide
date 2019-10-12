@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    {{ template "header" . }}
   </head>
   <body>
-    {{template "navbar"}}
+    {{ template "navbar" . }}
     <section class="section">
       <div class="columns is-mobile">
         <div class="column is-three-fifths is-offset-one-fifth">
-          <form method="post" action="/api/signup">
+          <div id="notification" class="notification is-danger is-hidden">
+          </div>
+          <div id="form">
             <div class="field">
               <label class="label">Username</label>
-              <div class="control has-icons-left has-icons-right">
-                <input class="input" id="username" type="text" placeholder="Username" value="">
+              <div class="control has-icons-left">
+                <input id="username" name="username" class="input" type="text" placeholder="Username" value="">
                 <span class="icon is-small is-left">
                   <i class="fas fa-user"></i>
                 </span>
@@ -26,22 +24,27 @@
 
             <div class="field">
               <label class="label">Password</label>
-              <div class="control">
-                <input class="input" type="password" placeholder="Text input">
+              <div class="control has-icons-left">
+                <input id="password" name="password" class="input" type="password" placeholder="Password">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-key"></i>
+                </span>
               </div>
+              <p class="help" id="password"></p>
             </div>
             
             <div class="field is-grouped">
               <div class="control">
-                <button type="submit" class="button is-link">Signin</button>
+                <button type="submit" class="button is-primary">Signin</button>
               </div>
             </div>
-          </form>
+          </div>
 
         </div>
       </div>
     </section>
     <!-- Begin additional javascript -->
-    <script src="static/js/main.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/signin.js"></script>
   </body>
 </html>
