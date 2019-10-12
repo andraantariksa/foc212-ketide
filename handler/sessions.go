@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo-contrib/session"
@@ -13,7 +12,6 @@ import (
 
 func IsLoggedIn(c echo.Context) bool {
 	sess, err := session.Get("user", c)
-	fmt.Println(sess.Values) // DEBUG
 	if err != nil || sess.Values["id"] == nil {
 		return false
 	}

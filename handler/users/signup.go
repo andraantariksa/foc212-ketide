@@ -13,7 +13,7 @@ func SignupHandler(c echo.Context) error {
 	data := map[string]interface{}{
 		"title": "Signup",
 	}
-	return c.Render(http.StatusOK, "user/signup.html", handler.AppendSessionData(data))
+	return c.Render(http.StatusOK, "user/signup.html", handler.AppendSessionData(c, data))
 }
 
 type signupForm struct {
