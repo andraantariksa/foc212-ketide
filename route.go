@@ -15,24 +15,28 @@ func route(e *echo.Echo) {
 		return c.Render(http.StatusOK, "home.html", handler.AppendSessionData(c, map[string]interface{}{}))
 	})
 
-	e.GET("/recent", handler.RequiresSignin(users.RecentCodesHandler))
+	e.GET("/help", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "help.html", handler.AppendSessionData(c, map[string]interface{}{}))
+	})
+
+	e.GET("/myrecent", handler.RequiresSignin(users.RecentCodesHandler))
+
+	e.GET("/settings", handler.RequiresSignin(users.SettingsHandler))
+	e.POST("/settings", handler.RequiresSignin(users.SettingsProcessHandler))
 
 	e.GET("/signin", handler.RequiresSignout(users.SigninHandler))
 	e.POST("/signin", handler.RequiresSignout(users.SigninProcessHandler))
+
 	e.GET("/signup", handler.RequiresSignout(users.SignupHandler))
 	e.POST("/signup", handler.RequiresSignout(users.SignupProcessHandler))
+
 	e.GET("/signout", handler.RequiresSignin(func(c echo.Context) error {
 		handler.Signout(c)
 		return c.Redirect(http.StatusTemporaryRedirect, "/signin")
 	}))
 
-	e.GET("/help", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "help.html", handler.AppendSessionData(c, map[string]interface{}{}))
-	})
-	e.GET("/settings", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "user/settings.html", map[string]interface{}{})
-	})
+	e.POST("/code/create", codes.Create)
 
-	e.POST("/exec", codes.Exec)
 	e.GET("/:id", codes.Get)
+	e.GET("/raw/:id", codes.GetRAW)
 }

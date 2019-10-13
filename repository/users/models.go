@@ -59,3 +59,8 @@ func (u *Users) GetUserByUsernamePassword() (*Users, error) {
 
 	return &users[0], nil
 }
+
+func (u *Users) UpdateWhereID(id uint64) error {
+	_, err := repository.DB.Id(id).Update(u)
+	return err
+}

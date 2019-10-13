@@ -45,7 +45,7 @@ func (c *Codes) FindByID() (*Codes, error) {
 	return &codes[0], nil
 }
 
-func (c *Codes) FindOwnedByUserID() ([]Codes, error) {
+func (c *Codes) FindAllOwnedCodesByUserID() ([]Codes, error) {
 	codes := []Codes{}
 
 	err := repository.DB.Find(&codes, &Codes{

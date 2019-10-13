@@ -49,6 +49,8 @@ fieldPassword.addEventListener("change", () => {
 
 buttonSubmit.addEventListener("click", () => {
   notification.classList.add("is-hidden");
+  notification.classList.remove("is-danger");
+  notification.classList.remove("is-success");
   fetch('/signin', {
       method: 'POST',
       headers: {
@@ -64,14 +66,13 @@ buttonSubmit.addEventListener("click", () => {
   .then((data) => {
       notification.classList.remove("is-hidden");
       if (!data.success) {
+          notification.classList.add("is-danger");
           notification.innerText = data.message;
       } else {
           form.classList.add("is-hidden");
-          notification.classList.remove("is-danger");
           notification.classList.add("is-success");
           notification.innerText = "Welcome " + fieldUsername.value + " !";
-          window.location.replace("/recent");
-          return;
+          window.location.replace("/myrecent");
       }
   });
 });

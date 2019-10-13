@@ -15,7 +15,7 @@ type codeForm struct {
 	Language string `validate:"required"`
 }
 
-func Exec(c echo.Context) error {
+func Create(c echo.Context) error {
 	cf := new(codeForm)
 	if err := c.Bind(cf); err != nil {
 		return c.String(http.StatusOK, "err")

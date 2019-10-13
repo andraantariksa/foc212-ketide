@@ -17,7 +17,7 @@ func RecentCodesHandler(c echo.Context) error {
 		Owner: sessData["id"].(uint64),
 	}
 
-	codes, err := u.FindOwnedByUserID()
+	codes, err := u.FindAllOwnedCodesByUserID()
 
 	if err == nil {
 		data["codes"] = codes
