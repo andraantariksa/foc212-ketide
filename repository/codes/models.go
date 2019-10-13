@@ -14,6 +14,7 @@ type Codes struct {
 	Code      string `xorm:"not null"`
 	Stdin     string
 	Stdout    string
+	Stderr    string
 	Owner     uint64    `xorm:"not null"`
 	CreatedAt time.Time `xorm:"created"`
 	UpdatedAt time.Time `xorm:"updated"`
@@ -57,4 +58,10 @@ func (c *Codes) FindAllOwnedCodesByUserID() ([]Codes, error) {
 	}
 
 	return codes, nil
+}
+
+func (c *Codes) Delete() error {
+	_, err := repository.DB.Delete(c)
+
+	return err
 }

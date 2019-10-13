@@ -132,6 +132,7 @@ buttonSubmit.addEventListener("click", () => {
             notification.innerText = data.message;
         } else {
             notification.classList.add("is-success");
+            form.classList.add("is-hidden");
             notification.innerText = "Congratulations! You account has been created!";
         }
     });

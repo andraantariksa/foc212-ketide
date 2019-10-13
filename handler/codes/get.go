@@ -45,6 +45,7 @@ func Get(c echo.Context) error {
 	data := map[string]interface{}{
 		"code":  foundCode,
 		"owner": foundUser,
+		"id":    id,
 		"title": id,
 	}
 

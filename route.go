@@ -36,6 +36,7 @@ func route(e *echo.Echo) {
 	}))
 
 	e.POST("/code/create", codes.Create)
+	e.DELETE("/code/delete", handler.RequiresSignin(codes.Delete))
 
 	e.GET("/:id", codes.Get)
 	e.GET("/raw/:id", codes.GetRAW)
