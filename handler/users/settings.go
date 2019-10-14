@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -41,11 +42,35 @@ func SettingsProcessHandler(c echo.Context) error {
 	}
 
 	sessData := data["session"].(map[interface{}]interface{})
-	u := users.Users{
+
+	u := &users.Users{
+		Username: sessData["username"].(string),
+		Password: sf.PasswordOld,
+	}
+
+	fmt.Println(u)
+
+	user, err := u.GetUserByUsernamePassword()
+
+	if err != nil {
+		return c.JSON(http.StatusBadGateway, map[string]interface{}{
+			"message": err.Error(),
+			"success": false,
+		})
+	}
+
+	if user == nil {
+		return c.JSON(http.StatusBadGateway, map[string]interface{}{
+			"message": "Wrong username or password",
+			"success": false,
+		})
+	}
+
+	userToBeChanged := users.Users{
 		Password: sf.Password,
 	}
 
-	if err := u.UpdateWhereID(sessData["id"].(uint64)); err != nil {
+	if err := userToBeChanged.UpdateWhereID(sessData["id"].(uint64)); err != nil {
 		return c.JSON(http.StatusBadGateway, map[string]interface{}{
 			"message": err.Error(),
 			"success": false,
