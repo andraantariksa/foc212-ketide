@@ -20,6 +20,7 @@ import (
 func main() {
 	// Database
 	MigrateTable(repository.DB)
+	MigrateLanguage(repository.DB)
 
 	e := echo.New()
 

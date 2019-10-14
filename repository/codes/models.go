@@ -65,3 +65,13 @@ func (c *Codes) Delete() error {
 
 	return err
 }
+
+func (c *Codes) Total() (int64, error) {
+	total, err := repository.DB.Count(c)
+
+	if err != nil {
+		return total, err
+	}
+
+	return total, nil
+}

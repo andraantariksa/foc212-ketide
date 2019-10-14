@@ -19,6 +19,8 @@ func route(e *echo.Echo) {
 		return c.Render(http.StatusOK, "help.html", handler.AppendSessionData(c, map[string]interface{}{}))
 	})
 
+	e.GET("/stats", handler.StatsHandler)
+
 	e.GET("/myrecent", handler.RequiresSignin(users.RecentCodesHandler))
 
 	e.GET("/settings", handler.RequiresSignin(users.SettingsHandler))
